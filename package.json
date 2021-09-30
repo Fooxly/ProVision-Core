@@ -1,0 +1,9 @@
+{
+  "name": "provision",
+  "version": "1.0.0",
+  "description": "ProVision Core",
+  "main": "index.js",
+  "author": "Fooxly",
+  "license": "MIT",
+  "private": false
+}
