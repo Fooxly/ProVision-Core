@@ -23,6 +23,15 @@ const updateSettings = (): boolean => {
         }
     }
 
+    for (const keyword in keywords) {
+        keywords[keyword].isWholeLine = keywords[keyword].highlight === 'line';
+        delete keywords[keyword].highlight;
+        keywords[keyword].overviewRulerLane = keywords[keyword].rulerPlacement === 'left' ? 1 : keywords[keyword].rulerPlacement === 'center' ? 2 : keywords[keyword].rulerPlacement === 'right' ? 4 : keywords[keyword].rulerPlacement === 'full' ? 7 : null;
+        delete keywords[keyword].rulerPlacement;
+        keywords[keyword].overviewRulerColor = keywords[keyword].rulerColor;
+        delete keywords[keyword].rulerColor;
+    }
+
     // Set the new properties
     vscode.workspace.getConfiguration().update('ProVision.keywords', keywords, vscode.ConfigurationTarget.Global);
     vscode.workspace.getConfiguration().update('ProVision.groups', newGroups, vscode.ConfigurationTarget.Global);

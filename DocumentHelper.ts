@@ -23,7 +23,7 @@ export const getResultsForKeyword = (keyword: string, document?: vscode.TextDocu
     let match: RegExpExecArray | null;
     while (match = regex.exec(document.getText(range))) {
         const pos = document.positionAt(match.index + (range?.start ? document.offsetAt(range?.start) : 0));
-        const hitRange = new vscode.Range(pos, document.positionAt(match.index + (range?.start ? document.offsetAt(range?.start) : 0) + match[0].length - ((keywordProps?.mustIncludeColon ?? true ? 1 : 0))))
+        const hitRange = new vscode.Range(pos, document.positionAt(match.index + (range?.start ? document.offsetAt(range?.start) : 0) + match[0].length - ((keywordProps?.mustIncludeColon ?? true ? 1 : 0))));
         result.push({
             keyword,
             comment: document.lineAt(pos).text.slice(pos.character).trim(),

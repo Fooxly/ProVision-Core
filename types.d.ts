@@ -1,13 +1,8 @@
 import * as vscode from 'vscode';
 
-interface Keyword {
+interface Keyword extends vscode.DecorationRenderOptions {
     caseSensitive?: boolean;
     mustIncludeColon?: boolean;
-    color?: string;
-    backgroundColor?: string;
-    rulerPlacement?: 'left' | 'right';
-    rulerColor?: string;
-    highlight?: 'keyword' | 'line';
     group?: string;
 }
 
