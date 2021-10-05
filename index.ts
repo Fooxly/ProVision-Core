@@ -45,8 +45,9 @@ const handleConfigUpdate = () => {
 // Handle the listing of groups
 const handleListGroup = (...args: any[]) => {
     const group = args[0];
+    const range: vscode.Range | undefined = args[1];
     // Get the items which should be listed
-    const hits = getResultsForGroup(group, vscode.window.activeTextEditor?.document as vscode.TextDocument);
+    const hits = getResultsForGroup(group, vscode.window.activeTextEditor?.document as vscode.TextDocument, range);
     // If there are no hits, show an information message
     if (hits.length === 0) {
         vscode.window.showInformationMessage('No notes found. Good job!');

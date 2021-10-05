@@ -2,6 +2,37 @@ import * as vscode from 'vscode';
 import { HitResult } from './types';
 import { getKeyword, getKeywordNames, getKeywordsProperty } from './utils';
 
+export const getDocumentSymbols = (document: vscode.TextDocument): Thenable<vscode.DocumentSymbol[] | undefined> => {
+    return new Promise((resolve) => {
+        (async () => {
+            const symbols: vscode.DocumentSymbol[] | undefined = await vscode.commands.executeCommand<vscode.DocumentSymbol[]>(
+                'vscode.executeDocumentSymbolProvider',
+                document.uri
+            );
+            if (!symbols) {
+                resolve(undefined);
+                return;
+            }
+
+            const result: vscode.DocumentSymbol[] = [];
+            for (const symbol of symbols) {
+                result?.push(...getDocumentSymbolChildren(symbol));
+            }
+
+            resolve(result);
+        })();
+    });
+};
+
+const getDocumentSymbolChildren = (symbol: vscode.DocumentSymbol): vscode.DocumentSymbol[] => {
+    let result: vscode.DocumentSymbol [] = [];
+    result.push(symbol);
+    for (const child of symbol.children) {
+        result.push(...getDocumentSymbolChildren(child));
+    }
+    return result;
+};
+
 export const navigateToHitResult = (hit: HitResult, editor?: vscode.TextEditor) => {
     const editorToUse = editor ?? vscode.window.activeTextEditor;
     if (!editorToUse) return;
@@ -105,6 +136,7 @@ export const onDocumentChangeListener = (context: vscode.ExtensionContext, callb
 };
 
 export default {
+    getDocumentSymbols,
     navigateToHitResult,
     getResultsForKeyword,
     getResultsForGroup,
