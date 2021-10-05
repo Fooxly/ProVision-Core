@@ -54,7 +54,7 @@ const handleListGroup = (...args: any[]) => {
     }
 
     // Move when single result is given and list.moveOnSingleResult is true
-    if (hits.length === 1 && coreConfig.get<boolean>('list.moveOnSingleResult')) {
+    if (hits.length === 1 && (coreConfig.get<boolean>('list.moveOnSingleResult') ?? true)) {
         navigateToHitResult(hits[0]);
         return;
     }
