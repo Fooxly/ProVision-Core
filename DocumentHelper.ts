@@ -95,6 +95,26 @@ export const getResultsForGroup = (group: string, document?: vscode.TextDocument
     return result;
 };
 
+export const getResults = (document?: vscode.TextDocument, range?: vscode.Range): HitResult[] => {
+    // Check if there is actualy text to check
+    if (!document || !document?.getText?.(range)?.length) return [];
+
+    // Get HitResults for all the keywords inside a group
+    let result: HitResult[] = [];
+    const keywords = getKeywordsProperty();
+    for (const keyword in keywords) {
+        result.push(...getResultsForKeyword(keyword, document, range));
+    }
+
+    // Sort the results based on line number
+    result.sort((last, curr) => {
+        if (last.lineNumber < curr.lineNumber) return -1;
+        if (last.lineNumber > curr.lineNumber) return 1;
+        return 0;
+    });
+    return result;
+};
+
 export const getCountForKeyword = (keyword: string, document?: vscode.TextDocument, range?: vscode.Range): number => {
     // Check if there is actualy text to check
     if (!document || !document?.getText?.(range)?.length) return 0;
@@ -140,6 +160,7 @@ export default {
     navigateToHitResult,
     getResultsForKeyword,
     getResultsForGroup,
+    getResults,
     getCountForKeyword,
     getCountForGroup,
     onDocumentChangeListener
